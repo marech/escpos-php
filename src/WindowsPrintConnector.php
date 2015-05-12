@@ -258,7 +258,13 @@ class WindowsPrintConnector implements PrintConnector {
 			/* Final print-out */
 			$filename = tempnam(sys_get_temp_dir(), "escpos");
 			file_put_contents($filename, $data);
-			$this -> runCopy($filename, $device);
+			
+			#hotfix
+			#for some resons 1st print fails
+			if(!$this -> runCopy($filename, $device)){
+				sleep(1);
+				$this -> runCopy($filename, $device);
+			}
 			unlink($filename);
 		} else {
 			/* Drop data straight on the printer */
